@@ -103,9 +103,17 @@ export default function Game(): JSX.Element {
 
       // Mover la serpiente
       const newHead = {
-        x: (snake[0].x + direction.x + GRID_SIZE) % GRID_SIZE,
-        y: (snake[0].y + direction.y + GRID_SIZE) % GRID_SIZE
+        x: snake[0].x + direction.x,
+        y: snake[0].y + direction.y
       };
+
+      // Verificar colisión con los bordes
+      if (newHead.x < 0 || newHead.x >= GRID_SIZE || newHead.y < 0 || newHead.y >= GRID_SIZE) {
+        setGameOver(true);
+        clearInterval(gameLoop);
+        updateMaxScore();
+        return;
+      }
 
       // Verificar colisión con la serpiente
       if (snake.some(segment => segment.x === newHead.x && segment.y === newHead.y)) {
